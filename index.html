@@ -358,6 +358,19 @@
         text-align: center;
       }
 
+      #ov-date {
+        top: 18%;
+        height: 3%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Intelo", sans-serif;
+        font-weight: 600;
+        font-size: clamp(8px, 2vw, 16px);
+        color: #e8f5e9;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+
       #ov-name {
         top: 28.5%;
         height: 8%;
@@ -750,7 +763,7 @@
         />
 
         <label>Proceeding To</label>
-        <input type="text" id="f-proc" placeholder="e.g. Avalon Cemetery" />
+        <input type="text" id="f-proc" placeholder="Proceeding to Cemetery" />
 
         <label
           style="
@@ -819,6 +832,7 @@
         <div id="notice">
           <img class="bg-img" id="bg-template" src="" alt="" />
 
+          <div class="overlay" id="ov-date"><span id="p-date"></span></div>
           <div class="overlay" id="ov-name"><span id="p-name"></span></div>
           <div class="overlay" id="ov-rel"><span id="p-rel"></span></div>
           <div class="overlay" id="ov-address">
@@ -976,6 +990,21 @@
 
       // ===================== GENERATE =====================
       function generate() {
+        // Date
+        const dateVal = document.getElementById("f-date").value;
+        const showHijri = document.getElementById("f-hijri").checked;
+        let dateText = "";
+        if (dateVal) {
+          const [y, m, d] = dateVal.split("-").map(Number);
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          dateText = `${d} ${monthNames[m - 1]} ${y}`;
+          if (showHijri) {
+            const hijriDate = gregorianToHijri(y, m, d);
+            dateText += ` (${hijriDate})`;
+          }
+        }
+        document.getElementById("p-date").textContent = dateText;
+
         // Name
         const nameEl = document.getElementById("p-name");
         nameEl.textContent = (
